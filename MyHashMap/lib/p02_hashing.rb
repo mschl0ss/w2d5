@@ -4,11 +4,24 @@ end
 
 class Array
   def hash
+    result = 0
+    for i in (0...length-1)
+      result += (length*2+(83*i))+self[i]
+    end
+    result
   end
 end
 
 class String
   def hash
+    indices = 0
+    alpha = ("a".."z").to_a
+    self.each_char do |char| 
+      if alpha.include?(char)
+        indices += alpha.index(char)
+      end
+    end
+    indices
   end
 end
 
