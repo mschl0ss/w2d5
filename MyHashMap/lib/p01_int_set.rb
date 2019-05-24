@@ -67,15 +67,17 @@ class ResizingIntSet
     @store = Array.new(num_buckets) { Array.new }
     @count = 0
   end
-
+  
   def insert(num)
     # debugger
     bucket = @store[num % num_buckets]
+    # if count == @store.size
+
     unless bucket.include?(num)
       bucket << num
-      @count +=1
+      @count += 1
     end
-    # resize! if @count >= length
+    resize! if @count == num_buckets
   end
 
   def remove(num)
@@ -102,15 +104,16 @@ class ResizingIntSet
 
   def resize!
     
-      new_num_buckets = length * 2
-      ris = ResizingIntSet.new(new_num_buckets)
-      self.each do |bucket|
-        bucket.each do |num|
-          ris.insert(num)
-        end
+    holding_store = @store
+    @store = Array.new(num_buckets * 2) { Array.new }
+    @count = 0
+    for bucket in holding_store
+      for num in bucket
+        insert(num)
       end
-    
-    ris
-      
+    end
+
   end
+
+
 end
