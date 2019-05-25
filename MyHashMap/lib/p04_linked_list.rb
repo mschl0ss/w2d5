@@ -1,3 +1,5 @@
+require 'byebug'
+
 class Node
   attr_reader :key
   attr_accessor :val, :next, :prev
@@ -20,7 +22,14 @@ class Node
 end
 
 class LinkedList
+
+  include Enumerable
   def initialize
+    @head = Node.new
+    @tail = Node.new
+
+    @head.next = @tail
+    @tail.prev = @head
   end
 
   def [](i)
@@ -29,12 +38,15 @@ class LinkedList
   end
 
   def first
+    @head
   end
 
   def last
+    # @tail
   end
 
   def empty?
+    @head.next == @tail
   end
 
   def get(key)
@@ -44,6 +56,25 @@ class LinkedList
   end
 
   def append(key, val)
+    debugger
+    #(H) <=> (:first) <=> (T)
+    #(H) <=> (:first) <=> (new_node) <=> (T)
+
+    #create a new node
+    new_node = Node.new(key,val)
+    
+    #:first's next node needs to be new node
+    @tail.prev.next = new_node
+    
+    #tail's prev needs to be new_node's previous
+    new_node.prev = @tail.prev
+    
+    #new_node's next node needs to be tail
+    new_node.next = @tail
+
+    #tail's prev node needs to be new_node
+    @tail.prev = new_node
+
   end
 
   def update(key, val)
